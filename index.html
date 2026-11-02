@@ -24,12 +24,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jomhuria&family=Noto+Naskh+Arabic:wght@400;700&family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* Layout: desktop = two columns that fit one screen (verse and text with the zarb banner on the right,
-     the player on the left); phone = one column. Palette from the two drum strokes of the «ضرب» course:
-     indigo for the long syllable, saffron for the short. The banner uses zarb's own hero colours and wordmark face. */
+  /* Direction A, "stage": one centred column that fills the screen; the bar line is the hero,
+     sized from the viewport; zarb is a full-width band at the bottom, in zarb's own hero colours. */
   :root {
-    --ground: #f4f5f8; --surface: #ffffff; --ink: #1a1d2b; --muted: #585e73; --line: #d8dbe6; --soft: #eaecf3;
-    --tan: #4c4cb0; --tan-soft: #e7e7f5; --ta: #c9700f;
+    --ground: #f4f5f8; --surface: #ffffff; --ink: #1a1d2b; --muted: #585e73; --line: #d8dbe6; --soft: #e9ebf2;
+    --tan: #4c4cb0; --tan-soft: #e3e3f6; --ta: #c9700f;
     --zarb-bg: #FFB200; --zarb-ink: #121212; --zarb-mut: #3B2C00;
     --font: 'Noto Naskh Arabic', 'Vazirmatn', Tahoma, serif;
     --ui: 'Vazirmatn', Tahoma, sans-serif;
@@ -49,90 +48,88 @@
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; }
-  body { margin: 0; background: var(--ground); color: var(--ink); font: 400 1.05rem/1.9 var(--font); -webkit-text-size-adjust: 100%; }
-  :focus-visible { outline: 2px solid var(--tan); outline-offset: 2px; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 400 clamp(16px, calc(.5vw + .7vh + 4px), 23px)/1.9 var(--font); -webkit-text-size-adjust: 100%; }
+  :focus-visible { outline: 2px solid var(--tan); outline-offset: 3px; }
   button { font: inherit; color: inherit; }
   p { margin: 0; }
 
-  .page { min-height: 100%; max-width: 70rem; margin: 0 auto; display: grid; align-content: center; padding-block: 20px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-  .grid { display: grid; gap: 16px; grid-template-areas: "intro" "player" "zarb"; }
-  .intro { grid-area: intro; display: grid; gap: 8px; align-content: start; min-width: 0; }
-  .player { grid-area: player; min-width: 0; }
-  .zarb { grid-area: zarb; min-width: 0; }
-  @media (min-width: 56rem) {
-    .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); grid-template-areas: "intro player" "zarb player"; grid-template-rows: auto 1fr; gap: 22px 36px; align-items: start; }
-    .zarb { align-self: end; }
-  }
+  .stage { min-height: 100%; display: grid; grid-template-rows: 1fr auto; }
+  .main { display: grid; align-content: center; justify-items: center; text-align: center; gap: clamp(10px, 2.2vh, 30px); padding-block: clamp(20px, 4vh, 56px); padding-left: max(16px, env(safe-area-inset-left, 0px), 4vw); padding-right: max(16px, env(safe-area-inset-right, 0px), 4vw); }
+  .verse { font-size: clamp(2rem, 4.4vw, 4.8rem); font-weight: 700; line-height: 1.35; }
+  .who { color: var(--muted); font-size: .9em; margin-top: -.4em; }
+  .say { max-width: 44ch; }
 
-  .verse { font-size: clamp(1.6rem, 4.2vw, 2.4rem); font-weight: 700; line-height: 1.6; }
-  .who { font-size: .9rem; color: var(--muted); }
-  .say { font-size: 1.12rem; line-height: 1.95; margin-top: 4px; }
-
-  .player { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 14px; }
-  .seg { display: flex; gap: 6px; }
-  .seg button { flex: 1 1 0; min-width: 0; min-height: 44px; background: var(--soft); border: 1px solid transparent; border-radius: 8px; padding: 6px 8px; font-size: .9rem; line-height: 1.5; cursor: pointer; }
-  .seg button b { display: block; font-size: 1.2rem; font-weight: 700; }
-  .seg button[aria-pressed="true"] { background: var(--tan-soft); border-color: var(--tan); }
-  .rl { display: flex; gap: 3px; --r: 2; }
-  .s { display: flex; flex-direction: column; min-width: 0; text-align: center; transition: flex-grow .25s; }
+  .player { width: min(100%, 72rem); display: grid; gap: clamp(10px, 2vh, 24px); margin-top: clamp(4px, 1vh, 16px); }
+  .rl { display: flex; gap: clamp(3px, .4vw, 6px); --r: 2; }
+  .s { display: flex; flex-direction: column; gap: 4px; min-width: 0; text-align: center; transition: flex-grow .25s; }
   .s.k { flex: 1 1 0; }
   .s.b { flex: var(--r) 1 0; }
-  .s u { text-decoration: none; font-size: 1.05rem; line-height: 1.8; white-space: nowrap; }
-  .s i { display: block; height: 24px; border-radius: 4px; background: var(--ta); opacity: .9; transition: transform .08s; }
+  .s u { text-decoration: none; font-size: clamp(1rem, 1.7vw, 1.7rem); line-height: 1.6; white-space: nowrap; }
+  .s i { display: block; height: clamp(22px, 5vh, 54px); border-radius: 6px; background: var(--ta); opacity: .9; transition: transform .08s; }
   .s.b i { background: var(--tan); }
-  .s.on i { transform: scaleY(1.5); opacity: 1; }
+  .s.on i { transform: scaleY(1.35); opacity: 1; }
   @media (prefers-reduced-motion: reduce) { .s, .s i { transition: none; } }
-  .key { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: .9rem; color: var(--muted); }
+  .key { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 20px; font-size: .85em; color: var(--muted); }
   .key span::before { content: ""; display: inline-block; width: 18px; height: 10px; border-radius: 3px; margin-inline-end: 6px; background: var(--ta); }
   .key .b::before { width: 30px; background: var(--tan); }
-  .readout { font-size: .95rem; }
-  .go { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
-  .play { flex: none; min-height: 48px; min-width: 9rem; background: var(--tan); color: var(--surface); border: 0; border-radius: 8px; padding: 6px 24px; font-size: 1.15rem; font-weight: 700; cursor: pointer; }
-  .hint { flex: 1 1 14rem; font-size: .86rem; line-height: 1.8; color: var(--muted); }
 
-  .zarb { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 4px 20px; background: var(--zarb-bg); color: var(--zarb-ink); border: 1px solid var(--line); border-radius: 12px; padding: 14px 20px; text-decoration: none; }
+  .controls { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 10px; }
+  .seg { display: flex; gap: 8px; }
+  .seg button { min-width: 8.5em; background: var(--soft); border: 1px solid transparent; border-radius: 10px; padding: .4em 1em; font-size: .9em; line-height: 1.5; cursor: pointer; }
+  .seg button b { display: block; font-size: 1.25em; font-weight: 700; }
+  .seg button[aria-pressed="true"] { background: var(--tan-soft); border-color: var(--tan); }
+  .play { min-width: 8em; background: var(--tan); color: var(--surface); border: 0; border-radius: 10px; padding: .4em 1.6em; font-size: 1.25em; font-weight: 700; cursor: pointer; }
+  .readout { font-size: .9em; }
+  .hint { font-size: .78em; color: var(--muted); max-width: 60ch; justify-self: center; }
+
+  .zarb { display: flex; align-items: center; justify-content: center; gap: 6px 28px; flex-wrap: wrap; background: var(--zarb-bg); color: var(--zarb-ink); text-decoration: none; padding-block: clamp(10px, 1.6vh, 18px); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .zarb-word { font-family: var(--word); font-size: clamp(3.4rem, 5vw, 5rem); line-height: .7; padding-top: .12em; }
+  .zarb-text { display: grid; min-width: 0; }
+  .zarb-text b { font-family: var(--ui); font-weight: 700; }
+  .zarb-text span { font-size: .88em; color: var(--zarb-mut); }
+  .zarb-url { font-family: var(--ui); font-weight: 700; white-space: nowrap; }
   .zarb:hover .zarb-url, .zarb:focus-visible .zarb-url { text-decoration: underline; text-underline-offset: 3px; }
-  .zarb-word { font-family: var(--word); font-size: 5.6rem; line-height: .8; padding-top: 6px; }
-  .zarb-text { display: grid; gap: 2px; min-width: 0; }
-  .zarb-text b { font-family: var(--ui); font-size: 1.05rem; font-weight: 700; }
-  .zarb-text span { font-size: .92rem; line-height: 1.75; color: var(--zarb-mut); }
-  .zarb-text .zarb-url { font-family: var(--ui); font-weight: 700; color: var(--zarb-ink); white-space: nowrap; }
+
+  @media (max-width: 40rem) {
+    .controls { flex-direction: column; }
+    .seg button { flex: 1 1 0; min-width: 0; }
+    .play { min-height: 48px; }
+    .zarb { justify-content: flex-start; }
+  }
 </style>
 </head>
 <body>
-<main class="page" lang="fa" dir="rtl">
-  <div class="grid">
-    <div class="intro">
-      <p class="verse">توانا بُوَد هر که دانا بُوَد</p>
-      <p class="who">فردوسی، آغاز شاهنامه</p>
-      <p class="say">در بحث عروض این که هجای بلند چند برابر هجای کوتاه طول می‌کشد بحث است. این که نسبت دو برابر است یا کمتر و این که معنای آن اصلاً چیست را با این ابزار ساده می‌توانید بشنوید.</p>
-    </div>
+<div class="stage" lang="fa" dir="rtl">
+  <main class="main">
+    <p class="verse">توانا بُوَد هر که دانا بُوَد</p>
+    <p class="who">فردوسی، آغاز شاهنامه</p>
+    <p class="say">در بحث عروض این که هجای بلند چند برابر هجای کوتاه طول می‌کشد بحث است. این که نسبت دو برابر است یا کمتر و این که معنای آن اصلاً چیست را با این ابزار ساده می‌توانید بشنوید.</p>
 
     <section class="player" id="ratio-player" data-rep="2" data-gap="1.2" aria-label="پخش مصراع با سه نسبت">
-      <div class="seg" role="group" aria-label="نسبت هجای بلند به کوتاه">
-        <button type="button" id="r-2" data-r="2" aria-pressed="true"><b>۲ برابر</b>قاعدهٔ عروض</button>
-        <button type="button" id="r-157" data-r="1.57" aria-pressed="false"><b>۱٫۵۷ برابر</b>یک اندازه‌گیری</button>
-        <button type="button" id="r-13" data-r="1.3" aria-pressed="false"><b>۱٫۳ برابر</b>فقط برای مقایسه</button>
-      </div>
       <div class="rl" aria-hidden="true"><span class="s k"><u>تَ</u><i></i></span><span class="s b"><u>وا</u><i></i></span><span class="s b"><u>نا</u><i></i></span><span class="s k"><u>بُ</u><i></i></span><span class="s b"><u>وَد</u><i></i></span><span class="s b"><u>هر</u><i></i></span><span class="s k"><u>کِ</u><i></i></span><span class="s b"><u>دا</u><i></i></span><span class="s b"><u>نا</u><i></i></span><span class="s k"><u>بُ</u><i></i></span><span class="s b"><u>وَد</u><i></i></span></div>
       <div class="key"><span class="k">هجای کوتاه</span><span class="b">هجای بلند</span></div>
-      <p class="readout" id="readout" role="status"></p>
-      <div class="go">
+      <div class="controls">
+        <div class="seg" role="group" aria-label="نسبت هجای بلند به کوتاه">
+          <button type="button" id="r-2" data-r="2" aria-pressed="true"><b>۲ برابر</b>قاعدهٔ عروض</button>
+          <button type="button" id="r-157" data-r="1.57" aria-pressed="false"><b>۱٫۵۷ برابر</b>یک اندازه‌گیری</button>
+          <button type="button" id="r-13" data-r="1.3" aria-pressed="false"><b>۱٫۳ برابر</b>فقط برای مقایسه</button>
+        </div>
         <button class="play" id="play" type="button">بشنوید</button>
-        <p class="hint">صدا را خود مرورگر می‌سازد. اگر چیزی نمی‌شنوید، صدای دستگاه را بالا ببرید. در آیفون کلید بی‌صدا را هم خاموش کنید.</p>
       </div>
+      <p class="readout" id="readout" role="status"></p>
+      <p class="hint">صدا را خود مرورگر می‌سازد. اگر چیزی نمی‌شنوید، صدای دستگاه را بالا ببرید. در آیفون کلید بی‌صدا را هم خاموش کنید.</p>
     </section>
+  </main>
 
-    <a class="zarb" href="https://zarb.mosaic-hub.de/">
-      <span class="zarb-word" aria-hidden="true">ضرب</span>
-      <span class="zarb-text">
-        <b>ضرب: وزن شعر فارسی</b>
-        <span>با صدای ضرب، وزن شعر فارسی را بشناسید، حدس بزنید و رد وزن‌ها را در شعر هزار سال دنبال کنید.</span>
-        <span class="zarb-url"><bdi>zarb.mosaic-hub.de</bdi> ←</span>
-      </span>
-    </a>
-  </div>
-</main>
+  <a class="zarb" href="https://zarb.mosaic-hub.de/">
+    <span class="zarb-word" aria-hidden="true">ضرب</span>
+    <span class="zarb-text">
+      <b>ضرب: وزن شعر فارسی</b>
+      <span>با صدای ضرب، وزن شعر فارسی را بشناسید، حدس بزنید و رد وزن‌ها را در شعر هزار سال دنبال کنید.</span>
+    </span>
+    <span class="zarb-url"><bdi>zarb.mosaic-hub.de</bdi> ←</span>
+  </a>
+</div>
 
 <script>
 (function () {
