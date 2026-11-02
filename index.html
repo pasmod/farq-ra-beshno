@@ -22,16 +22,15 @@
 <meta name="color-scheme" content="light dark">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&family=Source+Serif+4:wght@400;600&family=Vazirmatn:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
 <style>
   /* Layout: one short column that holds only the player.
      Palette from the two drum strokes of the «ضرب» course: indigo for the long syllable, saffron for the short. */
   :root {
     --ground: #f4f5f8; --surface: #ffffff; --ink: #1a1d2b; --muted: #585e73; --line: #d8dbe6; --soft: #eaecf3;
     --tan: #4c4cb0; --tan-soft: #e7e7f5; --ta: #c9700f; --ta-soft: #fbeedd;
-    --font: 'Vazirmatn', Tahoma, 'Segoe UI', sans-serif;
+    --font: 'Noto Naskh Arabic', 'Vazirmatn', Tahoma, serif;
     --verse: 'Noto Naskh Arabic', 'Vazirmatn', serif;
-    --latin: 'Source Serif 4', Georgia, serif;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -55,7 +54,7 @@
   .who { font-size: .84rem; color: var(--muted); margin: -10px 0 0; }
   .seg { display: flex; flex-wrap: wrap; gap: 6px; }
   .seg button { flex: 1 1 0; min-width: 0; min-height: 44px; background: var(--soft); border: 1px solid transparent; border-radius: 8px; padding: 6px 8px; font-size: .86rem; line-height: 1.5; cursor: pointer; }
-  .seg button b { display: block; font-size: 1.15rem; font-weight: 800; }
+  .seg button b { display: block; font-size: 1.15rem; font-weight: 700; }
   .seg button[aria-pressed="true"] { background: var(--tan-soft); border-color: var(--tan); }
   .rl { display: flex; gap: 3px; --r: 2; }
   .s { display: flex; flex-direction: column; min-width: 0; text-align: center; transition: flex-grow .25s; }
@@ -70,7 +69,7 @@
   .key span::before { content: ""; display: inline-block; width: 18px; height: 10px; border-radius: 3px; margin-inline-end: 6px; vertical-align: 0; background: var(--ta); }
   .key .b::before { width: 30px; background: var(--tan); }
   .readout { font-size: .9rem; font-variant-numeric: tabular-nums; margin: 0; }
-  .play { justify-self: start; min-height: 48px; min-width: 9rem; background: var(--tan); color: var(--surface); border: 0; border-radius: 8px; padding: 6px 24px; font-size: 1.1rem; font-weight: 800; cursor: pointer; }
+  .play { justify-self: start; min-height: 48px; min-width: 9rem; background: var(--tan); color: var(--surface); border: 0; border-radius: 8px; padding: 6px 24px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
   .hint { font-size: .84rem; color: var(--muted); margin: 0; }
   .more { margin: 4px 0 0; font-size: .95rem; color: var(--muted); }
   .more a { color: var(--tan); font-weight: 700; text-underline-offset: 3px; }
