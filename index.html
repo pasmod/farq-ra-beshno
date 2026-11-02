@@ -48,14 +48,11 @@
   .page { max-width: 40rem; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
   :focus-visible { outline: 2px solid var(--tan); outline-offset: 2px; }
   button { font: inherit; color: inherit; }
-  .eyebrow { font-size: .86rem; font-weight: 700; color: var(--muted); letter-spacing: .02em; margin: 0; }
-  h1 { font-size: clamp(2.1rem, 8vw, 3rem); font-weight: 800; line-height: 1.25; margin: 2px 0 10px; text-wrap: balance; }
   h2 { font-size: 1.25rem; font-weight: 800; line-height: 1.5; margin: 36px 0 8px; text-wrap: balance; }
   p { margin: 0 0 12px; }
-  .lead { font-size: 1.1rem; color: var(--muted); }
   .latin { font-family: var(--latin); font-size: .94em; unicode-bidi: isolate; direction: ltr; }
 
-  .player { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; margin: 22px 0 12px; display: grid; gap: 12px; }
+  .player { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; margin: 0 0 12px; display: grid; gap: 12px; }
   .verse { font-family: var(--verse); font-size: clamp(1.4rem, 5.5vw, 1.8rem); font-weight: 700; line-height: 1.7; margin: 0; }
   .who { font-size: .84rem; color: var(--muted); margin: -10px 0 0; }
   .seg { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -89,10 +86,6 @@
 <body>
 
 <div class="page" lang="fa" dir="rtl">
-  <p class="eyebrow">وزن شعر فارسی</p>
-  <h1>فرق را بشنو</h1>
-  <p class="lead">شعر کلاسیک فارسی از هجاهای کوتاه و بلند ساخته شده است. کتاب‌های عروض می‌گویند هر هجای بلند برابر دو هجای کوتاه است. ولی وقتی کسی شعر را می‌خواند، هجای بلند واقعاً دو برابر کوتاه طول می‌کشد؟</p>
-
   <section class="player" id="ratio-player" data-rep="2" data-gap="1.2" aria-label="پخش مصراع با سه نسبت">
     <p class="verse">توانا بُوَد هر که دانا بُوَد</p>
     <p class="who">فردوسی، آغاز شاهنامه</p>
