@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;700&family=Source+Serif+4:wght@400;600&family=Vazirmatn:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-  /* Layout: one short column; the player comes first, the explanation of the three numbers after it.
+  /* Layout: one short column that holds only the player.
      Palette from the two drum strokes of the «ضرب» course: indigo for the long syllable, saffron for the short. */
   :root {
     --ground: #f4f5f8; --surface: #ffffff; --ink: #1a1d2b; --muted: #585e73; --line: #d8dbe6; --soft: #eaecf3;
@@ -48,9 +48,7 @@
   .page { max-width: 40rem; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
   :focus-visible { outline: 2px solid var(--tan); outline-offset: 2px; }
   button { font: inherit; color: inherit; }
-  h2 { font-size: 1.25rem; font-weight: 800; line-height: 1.5; margin: 36px 0 8px; text-wrap: balance; }
   p { margin: 0 0 12px; }
-  .latin { font-family: var(--latin); font-size: .94em; unicode-bidi: isolate; direction: ltr; }
 
   .player { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; margin: 0 0 12px; display: grid; gap: 12px; }
   .verse { font-family: var(--verse); font-size: clamp(1.4rem, 5.5vw, 1.8rem); font-weight: 700; line-height: 1.7; margin: 0; }
@@ -75,12 +73,6 @@
   .play { justify-self: start; min-height: 48px; min-width: 9rem; background: var(--tan); color: var(--surface); border: 0; border-radius: 8px; padding: 6px 24px; font-size: 1.1rem; font-weight: 800; cursor: pointer; }
   .hint { font-size: .84rem; color: var(--muted); margin: 0; }
 
-  dl.nums { margin: 0; display: grid; gap: 14px; }
-  dl.nums div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0 12px; }
-  dl.nums dt { font-weight: 800; font-size: 1.15rem; color: var(--tan); font-variant-numeric: tabular-nums; line-height: 1.7; }
-  dl.nums dd { margin: 0; line-height: 1.85; }
-  .src { font-size: .84rem; color: var(--muted); line-height: 1.8; }
-  @media (max-width: 26rem) { dl.nums div { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
 <body>
@@ -98,18 +90,10 @@
     <div class="rl" aria-hidden="true"><span class="s k"><u>تَ</u><i></i></span><span class="s b"><u>وا</u><i></i></span><span class="s b"><u>نا</u><i></i></span><span class="s k"><u>بُ</u><i></i></span><span class="s b"><u>وَد</u><i></i></span><span class="s b"><u>هر</u><i></i></span><span class="s k"><u>کِ</u><i></i></span><span class="s b"><u>دا</u><i></i></span><span class="s b"><u>نا</u><i></i></span><span class="s k"><u>بُ</u><i></i></span><span class="s b"><u>وَد</u><i></i></span></div>
     <div class="key"><span class="k">هجای کوتاه</span><span class="b">هجای بلند</span></div>
     <p class="readout" id="readout" role="status"></p>
-    <button class="play" id="play" type="button">بشنو</button>
+    <button class="play" id="play" type="button">بشنوید</button>
     <p class="hint">صدا را خود مرورگر می‌سازد. اگر چیزی نمی‌شنوی، صدای دستگاه را بالا ببر. در آیفون کلید بی‌صدا را هم خاموش کن.</p>
   </section>
 
-  <h2>این سه عدد از کجا می‌آیند؟</h2>
-  <dl class="nums">
-    <div><dt>۲ برابر</dt><dd>قاعدهٔ حساب در عروض. شاعر می‌تواند به‌جای دو هجای کوتاه یک هجای بلند بگذارد، جز در آغاز مصراع. پس در حساب وزن، یک بلند جای دو کوتاه می‌نشیند. این قاعده دربارهٔ حساب است و چیزی دربارهٔ زمان نمی‌گوید.</dd></div>
-    <div><dt>۱٫۵۷ برابر</dt><dd>یک اندازه‌گیری با ساعت. <span class="latin">L. P. Elwell-Sutton</span> در ۱۹۷۶ خواندن دو فارسی‌زبان تحصیل‌کرده را سنجید. هجای کوتاه به‌طور میانگین ۰٫۲۱ ثانیه طول کشید و هجای بلند ۰٫۳۳ ثانیه.</dd></div>
-    <div><dt>۱٫۳ برابر</dt><dd>عددی برای مقایسه، نه نتیجهٔ یک پژوهش. با آن بهتر می‌شنوی که نسبت کمتر چه صدایی دارد.</dd></div>
-  </dl>
-  <p style="margin-top:16px">اندازه‌گیری‌های زمان هجا در شعر فارسی از آدم‌های خیلی کمی آمده‌اند. گزارش‌های دیگری هم هست که نسبت را دو برابر یا بیشتر دانسته‌اند. پس این پرسش هنوز باز است.</p>
-  <p class="src">منبع‌ها: <span class="latin">Elwell-Sutton, «ʿARŪŻ», Encyclopædia Iranica, 1986</span> برای قاعدهٔ جانشینی. عددهای ۱۹۷۶ به نقل از <span class="latin">Thiesen, A Manual of Classical Persian Prosody, 1982, §37</span>. نسبت ۱٫۵۷ از تقسیم همین دو عدد به دست آمده است.</p>
 </div>
 
 <script>
@@ -139,7 +123,7 @@
     o.start(t); o.stop(t + 0.12);
   }
   function stop() {
-    timers.forEach(clearTimeout); timers = []; playing = false; btn.textContent = 'بشنو';
+    timers.forEach(clearTimeout); timers = []; playing = false; btn.textContent = 'بشنوید';
     line.querySelectorAll('.on').forEach(function (e) { e.classList.remove('on'); });
   }
   function start() {
