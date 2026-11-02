@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@700&family=Vazirmatn:wght@500;800&display=block" rel="stylesheet">
+<style>
+  :root { --ground: #f4f5f8; --surface: #ffffff; --ink: #1a1d2b; --muted: #585e73; --line: #d8dbe6; --tan: #4c4cb0; --ta: #c9700f; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body { background: var(--ground); color: var(--ink); font-family: 'Vazirmatn', sans-serif; padding: 56px 72px; display: grid; grid-template-rows: auto 1fr; gap: 36px; }
+  h1 { font-size: 72px; font-weight: 800; line-height: 1.15; margin: 0; }
+  .verse { font-family: 'Noto Naskh Arabic', serif; font-size: 40px; font-weight: 700; color: var(--muted); margin: 10px 0 0; line-height: 1.5; }
+  .rows { background: var(--surface); border: 2px solid var(--line); border-radius: 18px; padding: 30px 34px; display: grid; gap: 22px; align-content: center; }
+  .row { display: grid; grid-template-columns: 190px 1fr; align-items: center; gap: 24px; }
+  .row b { font-size: 34px; font-weight: 800; color: var(--tan); white-space: nowrap; }
+  .bars { display: flex; gap: 5px; }
+  .bars i { display: block; height: 34px; border-radius: 6px; background: var(--ta); flex: 1 1 0; }
+  .bars i.b { background: var(--tan); }
+</style>
+</head>
+<body>
+  <div>
+    <h1>فرق را بشنو</h1>
+    <p class="verse">توانا بُوَد هر که دانا بُوَد</p>
+  </div>
+  <div class="rows" id="rows"></div>
+<script>
+  var pattern = 'kbbkbbkbbkb', rows = document.getElementById('rows');
+  [['۲ برابر', 2], ['۱٫۵۷ برابر', 1.57], ['۱٫۳ برابر', 1.3]].forEach(function (r) {
+    var row = document.createElement('div'); row.className = 'row';
+    var label = document.createElement('b'); label.textContent = r[0];
+    var bars = document.createElement('div'); bars.className = 'bars';
+    pattern.split('').forEach(function (c) {
+      var i = document.createElement('i');
+      if (c === 'b') { i.className = 'b'; i.style.flexGrow = r[1]; }
+      bars.appendChild(i);
+    });
+    row.appendChild(label); row.appendChild(bars); rows.appendChild(row);
+  });
+</script>
+</body>
+</html>
