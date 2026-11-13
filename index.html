@@ -79,6 +79,7 @@
   .seg button b { display: block; font-size: 1.25em; font-weight: 700; }
   .seg button[aria-pressed="true"] { background: var(--tan-soft); border-color: var(--tan); }
   .play { min-width: 8em; background: var(--tan); color: var(--surface); border: 0; border-radius: 10px; padding: .4em 1.6em; font-size: 1.25em; font-weight: 700; cursor: pointer; }
+  .redraw { background: var(--soft); border: 1px solid var(--tan); border-radius: 10px; padding: .4em 1.2em; font-size: .95em; cursor: pointer; }
   .readout { font-size: .9em; }
   .hint { font-size: .78em; color: var(--muted); max-width: 60ch; justify-self: center; }
 
@@ -92,7 +93,9 @@
 
   @media (max-width: 40rem) {
     .controls { flex-direction: column; }
-    .seg button { flex: 1 1 0; min-width: 0; }
+    .seg { flex-wrap: wrap; }
+    .seg button { flex: 1 1 calc(50% - 8px); min-width: 0; }
+    .redraw { min-height: 44px; }
     .play { min-height: 48px; }
     .zarb { justify-content: flex-start; }
   }
@@ -105,7 +108,7 @@
     <p class="who">فردوسی، آغاز شاهنامه</p>
     <p class="say">در بحث عروض این که هجای بلند چند برابر هجای کوتاه طول می‌کشد بحث است. این که نسبت دو برابر است یا کمتر و این که معنای آن اصلاً چیست را با این ابزار ساده می‌توانید بشنوید.</p>
 
-    <section class="player" id="ratio-player" data-rep="2" data-gap="1.2" aria-label="پخش مصراع با سه نسبت">
+    <section class="player" id="ratio-player" data-rep="2" data-gap="1.2" aria-label="پخش مصراع با نسبت‌های مختلف">
       <div class="rl" aria-hidden="true"><span class="s k"><u>تَ</u><i></i></span><span class="s b"><u>وا</u><i></i></span><span class="s b"><u>نا</u><i></i></span><span class="s k"><u>بُ</u><i></i></span><span class="s b"><u>وَد</u><i></i></span><span class="s b"><u>هر</u><i></i></span><span class="s k"><u>کِ</u><i></i></span><span class="s b"><u>دا</u><i></i></span><span class="s b"><u>نا</u><i></i></span><span class="s k"><u>بُ</u><i></i></span><span class="s b"><u>وَد</u><i></i></span></div>
       <div class="key"><span class="k">هجای کوتاه</span><span class="b">هجای بلند</span></div>
       <div class="controls">
@@ -113,8 +116,10 @@
           <button type="button" id="r-2" data-r="2" aria-pressed="true"><b>۲ برابر</b>قاعدهٔ عروض</button>
           <button type="button" id="r-157" data-r="1.57" aria-pressed="false"><b>۱٫۵۷ برابر</b>یک اندازه‌گیری</button>
           <button type="button" id="r-13" data-r="1.3" aria-pressed="false"><b>۱٫۳ برابر</b>فقط برای مقایسه</button>
+          <button type="button" id="r-rand" data-r="rand" aria-pressed="false"><b>تصادفی</b>بین ۱٫۳ و ۲</button>
         </div>
         <button class="play" id="play" type="button">بشنوید</button>
+        <button class="redraw" id="redraw" type="button" hidden>نسبت‌های تازه</button>
       </div>
       <p class="readout" id="readout" role="status"></p>
       <p class="hint">صدا را خود مرورگر می‌سازد. اگر چیزی نمی‌شنوید، صدای دستگاه را بالا ببرید. در آیفون کلید بی‌صدا را هم خاموش کنید.</p>
@@ -135,16 +140,30 @@
 (function () {
   var ctx = null, timers = [], playing = false;
   var box = document.getElementById('ratio-player'), line = box.querySelector('.rl'), btn = document.getElementById('play'), out = document.getElementById('readout');
-  var rep = parseInt(box.dataset.rep, 10), gap = parseFloat(box.dataset.gap), ratio = 2;
+  var rep = parseInt(box.dataset.rep, 10), gap = parseFloat(box.dataset.gap), ratio = 2, rand = false, draws = [];
+  var redraw = document.getElementById('redraw');
   var syl = Array.prototype.slice.call(line.querySelectorAll('.s'));
-  var nLong = line.querySelectorAll('.s.b').length, nShort = syl.length - nLong;
+  var longs = syl.filter(function (s) { return s.classList.contains('b'); });
+  var nLong = longs.length, nShort = syl.length - nLong;
   // The line always lasts as long as it does at 2 : 1 with a short of 0.25 s, so a
   // different ratio only shares that time differently between long and short.
   var total = 0.25 * (nShort + 2 * nLong);
-  function unit() { return total / (nShort + ratio * nLong); }
+  // Random mode: each long syllable gets its own ratio, drawn evenly between 1.3 and 2
+  // and rounded to two decimals, so what the readout shows is exactly what plays.
+  function draw() {
+    draws = longs.map(function () { return Math.round((1.3 + Math.random() * 0.7) * 100) / 100; });
+    longs.forEach(function (el, i) { el.style.setProperty('--r', draws[i]); });
+  }
+  function ratioOf(s) { return s.classList.contains('b') ? (rand ? draws[longs.indexOf(s)] : ratio) : 1; }
+  function unit() { var w = 0; syl.forEach(function (s) { w += ratioOf(s); }); return total / w; }
   function fa(v, d) { return v.toLocaleString('fa', { minimumFractionDigits: d, maximumFractionDigits: d }); }
   function show() {
-    out.textContent = 'هجای کوتاه ' + fa(unit(), 2) + ' ثانیه، هجای بلند ' + fa(unit() * ratio, 2) + ' ثانیه. کل مصراع در هر سه حالت ' + fa(total, 1) + ' ثانیه است.';
+    if (rand) {
+      out.textContent = 'کشش هر هجای بلند جداگانه و تصادفی بین ۱٫۳ و ۲ برابر هجای کوتاه است، به ترتیب: ' + draws.map(function (r) { return fa(r, 2); }).join('، ') +
+        '. هجای کوتاه ' + fa(unit(), 2) + ' ثانیه است و کل مصراع مثل حالت‌های دیگر ' + fa(total, 1) + ' ثانیه.';
+      return;
+    }
+    out.textContent = 'هجای کوتاه ' + fa(unit(), 2) + ' ثانیه، هجای بلند ' + fa(unit() * ratio, 2) + ' ثانیه. کل مصراع در همهٔ حالت‌ها ' + fa(total, 1) + ' ثانیه است.';
   }
   function hit(t) {
     var o = ctx.createOscillator(), g = ctx.createGain();
@@ -170,7 +189,7 @@
     for (var r = 0; r < rep; r++) {
       if (r > 0) t += gap;
       syl.forEach(function (s) {
-        var dur = s.classList.contains('b') ? u * ratio : u;
+        var dur = u * ratioOf(s);
         hit(t);
         (function (el, ms, d) {
           timers.push(setTimeout(function () { el.classList.add('on'); }, ms));
@@ -184,11 +203,21 @@
   box.querySelectorAll('.seg button').forEach(function (b) {
     b.addEventListener('click', function () {
       box.querySelectorAll('.seg button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-      ratio = parseFloat(b.dataset.r);
-      line.style.setProperty('--r', ratio);
+      rand = b.dataset.r === 'rand';
+      redraw.hidden = !rand;
+      if (rand) draw();
+      else {
+        ratio = parseFloat(b.dataset.r);
+        longs.forEach(function (el) { el.style.removeProperty('--r'); });
+        line.style.setProperty('--r', ratio);
+      }
       show();
       if (playing) { stop(); start(); }
     });
+  });
+  redraw.addEventListener('click', function () {
+    draw(); show();
+    if (playing) { stop(); start(); }
   });
   btn.addEventListener('click', function () { if (playing) stop(); else start(); });
   show();
